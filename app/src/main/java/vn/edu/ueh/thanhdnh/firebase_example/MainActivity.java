@@ -18,7 +18,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
   FirebaseFirestore db;
   Button btAdd, btShow;
-  EditText etName, etPhone;
+  EditText etTitle, etContent, etUrl;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -33,10 +33,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     FirebaseApp.initializeApp(this);
     db = FirebaseFirestore.getInstance();
+    
     btAdd = findViewById(R.id.btAdd);
     btShow = findViewById(R.id.btShow);
-    etName = findViewById(R.id.etName);
-    etPhone = findViewById(R.id.etPhone);
+    etTitle = findViewById(R.id.etTitle);
+    etContent = findViewById(R.id.etContent);
+    etUrl = findViewById(R.id.etUrl);
+    
     btAdd.setOnClickListener(this);
     btShow.setOnClickListener(this);
   }
@@ -44,9 +47,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
   @Override
   public void onClick(View view) {
     if (view.getId() == R.id.btAdd) {
-      db.collection("users").add(new User(etName.getText().toString(), etPhone.getText().toString()));
-      etName.setText("");
-      etPhone.setText("");
+      Article article = new Article(
+          etTitle.getText().toString(),
+          etContent.getText().toString(),
+          etUrl.getText().toString()
+      );
+      db.collection("articles").add(article);
+      etTitle.setText("");
+      etContent.setText("");
+      etUrl.setText("");
     } else if (view.getId() == R.id.btShow) {
       Intent intent = new Intent(getBaseContext(), ShowDataActivity.class);
       startActivity(intent);
